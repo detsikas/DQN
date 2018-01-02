@@ -19,7 +19,8 @@ def params_to_filename_specifier(args):
                         "olr_"+str(args.optimizer_learning_rate)+"__"+\
                         "cpy_prd_"+str(args.optimizer)+"__"+\
                         "trn_epchs_"+str(args.training_epochs)+"__"+\
-                        "min_eps_"+str(args.min_epsilon)
+                        "min_eps_"+str(args.min_epsilon)+"__"+\
+                        "scaler_"+args.scaler
     return filename_specifier
 
 parser = argparse.ArgumentParser('DQN parameters')
@@ -45,6 +46,7 @@ parser.add_argument("--copy-period", "--copy_period", type=int, help="how often 
 parser.add_argument("--training-epochs", "--training_epochs", type=int, help="number of training epochs for each training step",
                     default=1)
 parser.add_argument("--min-epsilon", "--min_epsilon", type=float, help="minimum epsilon value", default=0.01)
+parser.add_argument("--scaler", type=str, help="scaler samples source", choices=["play", "random"], default="play")
 
 args = parser.parse_args()
 
@@ -61,6 +63,7 @@ print "Optimizer learning rate: "+str(args.optimizer_learning_rate)
 print "Copy period: "+str(args.copy_period)
 print "Training epochs: "+str(args.training_epochs)
 print "Minimum epsilon: "+str(args.min_epsilon)
+print "Scaler: "+args.scaler
 print
 
     
@@ -78,7 +81,7 @@ max_number_of_episodes = 10000
 epsilonDecay = 1.0
 dqn = DQN(env, args.gamma, args.experience_buffer_length, args.experience_buffer_batch_size, 
           args.activation_function, args.layers, not args.without_bias_term, args.optimizer,
-          args.optimizer_learning_rate, args.training_epochs)
+          args.optimizer_learning_rate, args.training_epochs, args.scaler)
 
 last_100_total_rewards = np.zeros(100)
 loss_averages = []

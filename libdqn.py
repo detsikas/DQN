@@ -17,7 +17,7 @@ class DQN:
     def __init__(self, env, gamma, 
                  experience_buffer_length, batch_size, 
                  activation_function, layers, bias_term, 
-                 optimizer, optimizer_learning_rate, training_epochs):
+                 optimizer, optimizer_learning_rate, training_epochs, scaler):
         self.experience_buffer_length = experience_buffer_length
         self.action_space_size = env.action_space.n
         self.state_space_size = env.observation_space.shape[0]
@@ -39,24 +39,26 @@ class DQN:
         self.target_regressor = self.build_regressor(activation_function, layers, bias_term,
                                                      optimizer, optimizer_learning_rate)
         
-        self.sc = self.build_scaler()
+        self.sc = self.build_scaler(scaler)
         
-    def build_scaler(self):
+    def build_scaler(self, scaler):
         sc = StandardScaler()
-        '''
-        observation_samples = np.array([]).reshape(0, self.state_space_size)
-        for i in range(1000):
-            s = self.env.reset()
-            done = False
-            max_moves = 20
-            
-            while not done and max_moves>0:
-                s, r, done, info = self.env.step(self.env.action_space.sample())
-                observation_samples = np.concatenate((observation_samples, s.reshape((1, self.state_space_size))))
-                max_moves-=1
-        '''
-        observation_samples = np.array([self.env.observation_space.sample() for x in range(40000)])
-        sc.fit(observation_samples)
+        if scaler=="play":
+            observation_samples = np.array([]).reshape(0, self.state_space_size)
+            for i in range(1000):
+                s = self.env.reset()
+                done = False
+                max_moves = 20
+                
+                while not done and max_moves>0:
+                    s, r, done, info = self.env.step(self.env.action_space.sample())
+                    observation_samples = np.concatenate((observation_samples, s.reshape((1, self.state_space_size))))
+                    max_moves-=1
+            sc.fit(observation_samples)
+        else:
+            observation_samples = np.array([self.env.observation_space.sample() for x in range(40000)])
+            sc.fit(observation_samples)
+
         return sc
         
     def build_regressor(self, activation_function, layers, bias_term, optimizer, optimizer_learning_rate):
