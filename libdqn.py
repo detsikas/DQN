@@ -77,9 +77,9 @@ class DQN:
         
         # Compiling the ANN
         if optimizer=="adam":
-            regressor.compile(optimizer=Adam(lr=0.001), loss = 'mse', metrics=['mse'])
+            regressor.compile(optimizer=Adam(lr=optimizer_learning_rate), loss = 'mse', metrics=['mse'])
         else:
-            regressor.compile(optimizer=RMSprop(lr=0.001), loss = 'mse', metrics=['mse'])
+            regressor.compile(optimizer=RMSprop(lr=optimizer_learning_rate), loss = 'mse', metrics=['mse'])
             
         return regressor
     

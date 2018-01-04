@@ -93,7 +93,7 @@ while i<max_number_of_episodes and not solved:
     s = env.reset()
     
     epsilonDecay+=0.01
-    epsilon = 0.7/epsilonDecay
+    epsilon = 1.0/epsilonDecay
     if epsilon<args.min_epsilon:
         epsilon = args.min_epsilon
     #epsilon = 1.0/np.sqrt(i+1)
@@ -131,7 +131,7 @@ while i<max_number_of_episodes and not solved:
         "\taverage(last 100): " +str(average)
     if average>=195:
         print "Solved after "+str(i)+" episodes, with last 100 episodes average total reward "+\
-        str(average)
+            str(average)
         solved = True
     i+=1
     
