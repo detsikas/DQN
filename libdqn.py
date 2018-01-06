@@ -106,39 +106,41 @@ class DQN:
     def train(self):
         if self.total_experience<self.experience_buffer_length:
             return 0
-        
-        # Select a random batch from the experience
-        rows = np.random.choice(self.experience_buffer.shape[0], size = self.batch_size, replace = False)
-        random_experience_batch = self.experience_buffer[rows]
-        
-        # Slice the input data (state)
-        X = random_experience_batch[:, :self.state_space_size]
-        
-        # Slice the pieces of information that will be used to calculate the output data
-        actions = random_experience_batch[:, self.state_space_size].astype(int)
-        rewards = random_experience_batch[:, self.state_space_size+1]
-        s_primes = random_experience_batch[:, self.state_space_size+2:-1]
-        dones = random_experience_batch[:, -1].astype(int)
-        
-        # Predict the Q values at each state for all actions ...
-        Y = self.target_regressor.predict(X)
 
-        # ... but for the actions taken the values will be updatad from the Bellman equations,
-        # if the game did not end with this action
-        # Do we really need to do that? Normally yes, as we do not want the value function of a terminal state
-        target_rewards = rewards+self.gamma*np.amax(self.target_regressor.predict(s_primes), axis=1)
+        loss = 0        
+        for i in range(self.training_epochs):
+            # Select a random batch from the experience
+            rows = np.random.choice(self.experience_buffer.shape[0], size = self.batch_size, replace = False)
+            random_experience_batch = self.experience_buffer[rows]
+            
+            # Slice the input data (state)
+            X = random_experience_batch[:, :self.state_space_size]
+            
+            # Slice the pieces of information that will be used to calculate the output data
+            actions = random_experience_batch[:, self.state_space_size].astype(int)
+            rewards = random_experience_batch[:, self.state_space_size+1]
+            s_primes = random_experience_batch[:, self.state_space_size+2:-1]
+            dones = random_experience_batch[:, -1].astype(int)
+            
+            # Predict the Q values at each state for all actions ...
+            Y = self.target_regressor.predict(X)
+    
+            # ... but for the actions taken the values will be updatad from the Bellman equations,
+            # if the game did not end with this action
+            # Do we really need to do that? Normally yes, as we do not want the value function of a terminal state
+            target_rewards = rewards+self.gamma*np.amax(self.target_regressor.predict(s_primes), axis=1)
+            
+            # if it did we just use the earned reward
+            target_rewards[np.nonzero(dones)] = rewards[np.nonzero(dones)]
+            
+            # Update the output values for the actions taken
+            Y[np.arange(self.batch_size), actions] = target_rewards
+            
+            # Fit the model
+            history = self.regressor.fit(X, Y, batch_size = self.batch_size, epochs = 1, verbose = 0)
+            loss += history.history['loss'][0]
         
-        # if it did we just use the earned reward
-        target_rewards[np.nonzero(dones)] = rewards[np.nonzero(dones)]
-        
-        # Update the output values for the actions taken
-        Y[np.arange(self.batch_size), actions] = target_rewards
-        
-        # Fit the model
-        history = self.regressor.fit(X, Y, batch_size = self.batch_size, epochs = self.training_epochs, verbose = 0)
-        loss = history.history['loss'][0]
-        
-        return loss
+        return loss/self.training_epochs
     
     def copy_regressor(self):
         self.target_regressor.set_weights(self.regressor.get_weights())
