@@ -25,28 +25,28 @@ def params_to_filename_specifier(args):
 
 parser = argparse.ArgumentParser('DQN parameters')
 parser.add_argument("--activation-function", "--activation_function", type=str, 
-                    help="activation function used in NN layers", 
+                    help="activation function used in NN layers (default: tanh)", 
                     choices=["relu","tanh"], default="tanh")
 parser.add_argument("--layers", type=int, nargs="+", 
-                    help="list of hidden layers in NN with their node counts", default=[200,200])
+                    help="list of hidden layers in NN with their node counts (default: 200, 200)", default=[200,200])
 parser.add_argument("--gamma", type=float, help="gamma value", default=0.99)
-parser.add_argument("--experience-buffer-length", "--experience_buffer_length", type=int, help="the length of the experience buffer", 
-                    default=200)
+parser.add_argument("--experience-buffer-length", "--experience_buffer_length", type=int, 
+                    help="the length of the experience buffer (default: 200)", default=200)
 parser.add_argument("--experience-buffer-batch-size", "--experience_buffer_batch_size", type=int, 
-                    help="the number of random samples taken from the experience buffer for training",
+                    help="the number of random samples taken from the experience buffer for training (default: 32)",
                     default=32)
 parser.add_argument("--without-bias-term", "--without_bias_term", action="store_true", 
-                    help="if a bias term should be added to the NN layers", default=False)
-parser.add_argument("--optimizer", type=str, help="optimizer used for the NN training",
+                    help="if a bias term should be added to the NN layers (default: false)", default=False)
+parser.add_argument("--optimizer", type=str, help="optimizer used for the NN training (default: adam)",
                     choices=["adam", "rmsprop"], default="adam")
 parser.add_argument("--optimizer-learning-rate", "--optimizer_learning_rate", type=float,
-                    help="the learning rate of the optimizer", default=0.001)
-parser.add_argument("--copy-period", "--copy_period", type=int, help="how often the NN weights are copied",
+                    help="the learning rate of the optimizer (default: 0.001)", default=0.001)
+parser.add_argument("--copy-period", "--copy_period", type=int, help="how often the NN weights are copied (default: 50)",
                     default=50)
-parser.add_argument("--training-epochs", "--training_epochs", type=int, help="number of training epochs for each training step",
-                    default=1)
-parser.add_argument("--min-epsilon", "--min_epsilon", type=float, help="minimum epsilon value", default=0.01)
-parser.add_argument("--scaler", type=str, help="scaler samples source", choices=["play", "random"], default="play")
+parser.add_argument("--training-epochs", "--training_epochs", type=int, 
+                    help="number of training epochs for each training step (default: 1)", default=1)
+parser.add_argument("--min-epsilon", "--min_epsilon", type=float, help="minimum epsilon value (default: 0.01)", default=0.01)
+parser.add_argument("--scaler", type=str, help="scaler samples source (default: play)", choices=["play", "random"], default="play")
 
 args = parser.parse_args()
 
