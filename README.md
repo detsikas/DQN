@@ -1,11 +1,13 @@
 # DQN
 Deep Q Network
 
-Highly customizable Deep Q Network for Reinforcement Learning.
+A highly customizable Deep Q Network for Reinforcement Learning.
 
 The project solves the [CartPole](https://github.com/openai/gym/wiki/CartPole-v0) environemnt using a Deep Q Network. 
 
 Multiple algorithm parameters can be customized so that the code can be tailored to solve other environments or Reinforcement Learning problems.
+
+Information about the project can also be found [here] (http://www.peeknpoke.net/single-post/2018/01/15/Deep-Q-Network).
 
 ## Parameters
 Here is a list of the customizable parameters of the algorithm:
