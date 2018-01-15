@@ -3,7 +3,7 @@ Deep Q Network
 
 A highly customizable [Deep Q Network](https://deepmind.com/research/dqn/) for Reinforcement Learning.
 
-A Deep Q Network, published by [DeepMind](https://deepmind.com/), is one of the most promising Reinforcement Learning algorithms 
+A Deep Q Network, published by [DeepMind](https://deepmind.com/), is one of the most promising Reinforcement Learning algorithms, with most impressive results, especially in teaching artificial intelligence agence to play Atari games. 
 
 The project solves the [CartPole](https://github.com/openai/gym/wiki/CartPole-v0) environemnt using a Deep Q Network. 
 
