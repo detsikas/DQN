@@ -9,7 +9,7 @@ The project solves the [CartPole](https://github.com/openai/gym/wiki/CartPole-v0
 
 Multiple algorithm parameters can be customized so that the code can be tailored to solve other environments or Reinforcement Learning problems.
 
-Information about the project can also be found [here](http://www.peeknpoke.net/single-post/2018/01/15/Deep-Q-Network).
+Information about the project can also be found [here](https://peeknpoke.net/?p=387).
 
 ## Parameters
 Here is a list of the customizable parameters of the algorithm:
